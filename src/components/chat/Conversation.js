@@ -1,8 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
+import { connect } from "react-redux";
 
-class Conversation extends Component {
-  render() {
-    return (
+const mapStateToProps = state => {
+  return { messages: state.messages };
+};
+
+const Conversation = ({messages}) => (
       <div className="content">
         <div className="contact-profile">
           <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt=""/>
@@ -10,10 +13,6 @@ class Conversation extends Component {
         </div>
         <div className="messages">
           <ul>
-            <li className="sent">
-              <img src="http://emilcarlsson.se/assets/mikeross.png" alt=""/>
-              <p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-            </li>
             <li className="replies">
               <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt=""/>
               <p>When you're backed against the wall, break the god damn thing down.</p>
@@ -54,8 +53,6 @@ class Conversation extends Component {
           </div>
         </div>
       </div>
-    );
-  }
-}
+);
 
-export default Conversation;
+export default connect(mapStateToProps)(Conversation);
