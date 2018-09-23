@@ -7,7 +7,10 @@ import {
   LOAD_SESSION_FAILURE,
   LOAD_USERS_START,
   LOAD_USERS_SUCCESS,
-  LOAD_USERS_FAILURE
+  LOAD_USERS_FAILURE,
+  LOAD_CONVERSATION_START,
+  LOAD_CONVERSATION_SUCCESS,
+  LOAD_CONVERSATION_FAILURE
 } from "../constants/action-types";
 
 import axios from 'axios';
@@ -86,5 +89,12 @@ export function loadUsers() {
       console.error(err);
       dispatch({type: LOAD_USERS_FAILURE, payload: err});
     }
+  };
+}
+
+export function selectUser(user) {
+  return async dispatch => {
+    dispatch({type: LOAD_CONVERSATION_START, payload: user});
+
   };
 }

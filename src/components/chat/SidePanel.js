@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './SidePanel.css'
 import {loadUsers} from "../../actions";
 import connect from "react-redux/es/connect/connect";
+import Contact from './Contact';
 
 class SidePanel extends Component {
 
@@ -19,18 +20,7 @@ class SidePanel extends Component {
       return <div className="no-contacts">No contacts</div>;
     }
 
-    return this.props.users.map(user => {
-      return <li className="contact">
-        <div className="wrap">
-          <span className="contact-status online"></span>
-          <img src={user.photo} alt=""/>
-          <div className="meta">
-            <p className="name">{user.username}</p>
-            <p className="preview">Message preview</p>
-          </div>
-        </div>
-      </li>
-    });
+    return this.props.users.map(user => <Contact username={user.username} photo={user.photo} />);
   }
 
   render() {

@@ -7,18 +7,21 @@ import {
   LOAD_SESSION_FAILURE,
   LOAD_USERS_START,
   LOAD_USERS_SUCCESS,
-  LOAD_USERS_FAILURE
+  LOAD_USERS_FAILURE,
+  LOAD_CONVERSATION_START,
+  LOAD_CONVERSATION_SUCCESS,
+  LOAD_CONVERSATION_FAILURE
 } from "../constants/action-types";
 
 const initialState = {
   currentUser: null,
-  messages: [],
   rooms: [],
   users: {
     loading: false,
     entries: [],
     error: null
   },
+  selectedUser: null,
   loading: true,
   error: null,
 };
@@ -88,6 +91,14 @@ const rootReducer = (state = initialState, action) => {
           loading: false,
           entries: [],
           error: action.payload
+        }
+      };
+    case LOAD_CONVERSATION_START:
+      return {
+        ...state,
+        selectedUser: {
+          username: action.payload.username,
+          photo: action.payload.photo
         }
       };
     default:
