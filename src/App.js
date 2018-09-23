@@ -29,7 +29,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  loggedIn: Boolean(state.username),
+  loggedIn: Boolean(state.currentUser),
   error: state.error,
   loading: state.loading
 });
