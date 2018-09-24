@@ -11,7 +11,6 @@ class SidePanel extends Component {
   }
 
   getContacts() {
-
     if (this.props.loading) {
       return <div className="no-contacts">Loading...</div>;
     }
@@ -20,7 +19,10 @@ class SidePanel extends Component {
       return <div className="no-contacts">No contacts</div>;
     }
 
-    return this.props.users.map(user => <Contact username={user.username} photo={user.photo} />);
+    return this.props.users.map(user => {
+      const lastMessage = user.lastMessage ? user.lastMessage : null;
+      return <Contact username={user.username} photo={user.photo} lastMessage={lastMessage}/>
+    });
   }
 
   render() {

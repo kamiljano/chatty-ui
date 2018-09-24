@@ -9,6 +9,7 @@ class Contact extends Component {
     super(props);
     this.username = props.username;
     this.photo = props.photo;
+    this.lastMessage = props.lastMessage;
 
     this.handleClick = this.handleClick.bind(this);
   }
@@ -32,7 +33,7 @@ class Contact extends Component {
           <img src={this.photo}/>
           <div className="meta">
             <p className="name">{this.username}</p>
-            <p className="preview">//TODO: replace the preview</p>
+            <p className="preview">{this.lastMessage}</p>
           </div>
         </div>
       </li>

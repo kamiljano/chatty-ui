@@ -14,9 +14,7 @@ class LoginForm extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    event.stopPropagation();
     this.props.logIn(this.state.username);
-    return false;
   }
 
   handleChange(event) {

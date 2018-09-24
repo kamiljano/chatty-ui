@@ -10,12 +10,13 @@ import {
   LOAD_USERS_FAILURE,
   LOAD_CONVERSATION_START,
   LOAD_CONVERSATION_SUCCESS,
-  LOAD_CONVERSATION_FAILURE
+  LOAD_CONVERSATION_FAILURE,
+  ADDED_USER, ADDED_MESSAGE, RECEIVED_MESSAGE
 } from "../constants/action-types";
 
 const initialState = {
   currentUser: null,
-  rooms: [],
+  messages: [],
   users: {
     loading: false,
     entries: [],
@@ -24,6 +25,50 @@ const initialState = {
   selectedUser: null,
   loading: true,
   error: null,
+};
+
+const uniqueUsers = (state, newUser) => {
+  return state.users.entries.some(user => user.username === newUser.username)
+    ? state.users.entries
+    : state.users.entries.concat([newUser]);
+};
+
+const processReceivedMessage = (state, payload) => {
+  const messages = state.selectedUser && state.selectedUser.username === payload.from
+    ? state.messages.concat([{
+      from: payload.from,
+      content: payload.body,
+      to: '~'
+    }])
+    : state.messages;
+  const userId = state.users.entries.findIndex(user => user.username === payload.from);
+  const newEntries = state.users.entries.slice(0);
+  newEntries[userId] = {
+    ...newEntries[userId],
+    lastMessage: payload.body
+  };
+  const result = {
+    ...state,
+    messages,
+    users: {
+      loading: false,
+      error: null,
+      entries: newEntries
+    }
+  };
+
+  return result;
+};
+
+const processAddedMessage = (state, payload) => {
+  return {
+    ...state,
+    messages: state.messages.concat([{
+      from: '~',
+      to: payload.to,
+      content: payload.content
+    }])
+  };
 };
 
 const rootReducer = (state = initialState, action) => {
@@ -96,11 +141,34 @@ const rootReducer = (state = initialState, action) => {
     case LOAD_CONVERSATION_START:
       return {
         ...state,
+        messages: [],
         selectedUser: {
           username: action.payload.username,
           photo: action.payload.photo
         }
       };
+    case LOAD_CONVERSATION_SUCCESS:
+      return {
+        ...state,
+        messages: action.payload.map(load => ({
+          from: load.from,
+          to: load.to,
+          content: load.message
+        }))
+      };
+    case ADDED_USER:
+      return {
+        ...state,
+        users: {
+          loading: false,
+          error: null,
+          entries: uniqueUsers(state, action.payload)
+        }
+      };
+    case RECEIVED_MESSAGE:
+      return processReceivedMessage(state, action.payload);
+    case ADDED_MESSAGE:
+      return processAddedMessage(state, action.payload);
     default:
       return state;
   }
