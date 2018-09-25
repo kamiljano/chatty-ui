@@ -17,7 +17,7 @@ import {
 import axios from 'axios';
 import Socket from './Socket';
 
-const BACKEND_URL = 'http://localhost:5555';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 let socket;
 
 const processLoginSuccess = (dispatch, username, photo) => {
