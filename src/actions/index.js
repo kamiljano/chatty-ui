@@ -123,5 +123,6 @@ export function submitMessage(targetUsername, message) {
         content: message
       }
     });
+    loadUsers()(dispatch);
   };
 }

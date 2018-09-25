@@ -61,14 +61,27 @@ const processReceivedMessage = (state, payload) => {
 };
 
 const processAddedMessage = (state, payload) => {
-  return {
+  const userId = state.users.entries.findIndex(user => user.username === payload.to);
+  const newEntries = state.users.entries.slice(0);
+  newEntries[userId] = {
+    ...newEntries[userId],
+    lastMessage: payload.content
+  };
+
+  const result = {
     ...state,
+    users: {
+      loading: false,
+      error: null,
+      entries: newEntries
+    },
     messages: state.messages.concat([{
       from: '~',
       to: payload.to,
       content: payload.content
     }])
   };
+  return result;
 };
 
 const rootReducer = (state = initialState, action) => {

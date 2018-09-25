@@ -21,7 +21,7 @@ class SidePanel extends Component {
 
     return this.props.users.map(user => {
       const lastMessage = user.lastMessage ? user.lastMessage : null;
-      return <Contact username={user.username} photo={user.photo} lastMessage={lastMessage}/>
+      return <Contact username={user.username} photo={user.photo} lastMessage={lastMessage}/>; //TODO: fix the last message
     });
   }
 
@@ -50,11 +50,6 @@ class SidePanel extends Component {
           <ul>
             {this.getContacts()}
           </ul>
-        </div>
-        <div id="bottom-bar">
-          <button id="addcontact"><i className="fa fa-user-plus fa-fw" aria-hidden="true"></i>
-            <span>Add contact</span></button>
-          <button id="settings"><i className="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
         </div>
       </div>
     );
