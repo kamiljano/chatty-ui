@@ -10,6 +10,7 @@ class Conversation  extends Component {
       currentMessage: ''
     };
 
+    this.messagesEnd = React.createRef();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -34,6 +35,18 @@ class Conversation  extends Component {
     this.setState({currentMessage: event.target.value});
   }
 
+  scrollToBottom() {
+    this.messagesEnd.current.scrollIntoView();
+  }
+
+  componentDidMount() {
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
   getMessages() {
     return this.props.messages.map(message => {
       return <li className={message.from === '~' ? 'sent' : 'replies'}>
@@ -49,6 +62,7 @@ class Conversation  extends Component {
       <div className="messages">
         <ul>
           {this.getMessages()}
+          <li ref={this.messagesEnd}></li>
         </ul>
       </div>
       <div className="message-input">

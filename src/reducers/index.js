@@ -33,6 +33,18 @@ const uniqueUsers = (state, newUser) => {
     : state.users.entries.concat([newUser]);
 };
 
+const updateUsersLastMessage = (entries, username, message) => {
+  return entries.map(entry => {
+    if (entry.username === username) {
+      return {
+        ...entry,
+        lastMessage: message
+      };
+    }
+    return {...entry};
+  });
+};
+
 const processReceivedMessage = (state, payload) => {
   const messages = state.selectedUser && state.selectedUser.username === payload.from
     ? state.messages.concat([{
@@ -41,19 +53,13 @@ const processReceivedMessage = (state, payload) => {
       to: '~'
     }])
     : state.messages;
-  const userId = state.users.entries.findIndex(user => user.username === payload.from);
-  const newEntries = state.users.entries.slice(0);
-  newEntries[userId] = {
-    ...newEntries[userId],
-    lastMessage: payload.body
-  };
   const result = {
     ...state,
     messages,
     users: {
       loading: false,
       error: null,
-      entries: newEntries
+      entries: updateUsersLastMessage(state.users.entries, payload.from, payload.body)
     }
   };
 
@@ -61,19 +67,12 @@ const processReceivedMessage = (state, payload) => {
 };
 
 const processAddedMessage = (state, payload) => {
-  const userId = state.users.entries.findIndex(user => user.username === payload.to);
-  const newEntries = state.users.entries.slice(0);
-  newEntries[userId] = {
-    ...newEntries[userId],
-    lastMessage: payload.content
-  };
-
   const result = {
     ...state,
     users: {
       loading: false,
       error: null,
-      entries: newEntries
+      entries: updateUsersLastMessage(state.users.entries, payload.to, payload.content)
     },
     messages: state.messages.concat([{
       from: '~',

@@ -1,6 +1,5 @@
 import openSocket from 'socket.io-client';
 import {ADDED_USER, RECEIVED_MESSAGE} from "../constants/action-types";
-import {loadUsers} from './index';
 
 const LABEL_PRIVATE_CHAT = 'privateChat';
 const LABEL_NEW_USER = 'newUser';
@@ -14,7 +13,6 @@ const configureSocket = (url, dispatch, socket) => {
         body: data.body
       }
     });
-    loadUsers()(dispatch);
   });
 
   socket.on(LABEL_NEW_USER, data => {
