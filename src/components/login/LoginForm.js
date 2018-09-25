@@ -30,7 +30,7 @@ class LoginForm extends Component {
         <input type="text" value={this.state.username} onChange={this.handleChange}></input>
         <input type="submit" value="Log in"/>
       </form>
-      {error && <div>Error! {error.message} : {error.response.data.error}</div>}
+      {error && error.response && error.response.data && <div>Error! {error.message} : {error.response.data.error}</div>}
     </div>;
   }
 }
