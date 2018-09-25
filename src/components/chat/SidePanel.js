@@ -1,13 +1,23 @@
 import React, {Component} from 'react';
 import './SidePanel.css'
-import {loadUsers} from "../../actions";
+import {loadUsers, selectUser} from "../../actions";
 import connect from "react-redux/es/connect/connect";
 import Contact from './Contact';
+import { NavLink } from 'react-router-dom';
 
 class SidePanel extends Component {
 
   componentDidMount() {
     this.props.loadUsers();
+  }
+
+  componentDidUpdate() {
+    if (this.props.urlUser && !this.props.selectedUser && this.props.users) {
+      const userToSelect = this.props.users.find(user => user.username === this.props.urlUser);
+      if (userToSelect) {
+        this.props.selectUser(userToSelect);
+      }
+    }
   }
 
   getContacts() {
@@ -19,7 +29,11 @@ class SidePanel extends Component {
       return <div className="no-contacts">No contacts</div>;
     }
 
-    return this.props.users.map((user, id) => <Contact id={id}/>);
+    return this.props.users.map((user, id) =>
+      <NavLink to={`/${user.username}`}>
+        <Contact id={id}/>
+      </NavLink>
+    );
   }
 
   render() {
@@ -29,18 +43,6 @@ class SidePanel extends Component {
           <div className="wrap">
             <img id="profile-img" src={this.props.currentUser.photo} className="online" alt=""/>
             <p>{this.props.currentUser.username}</p>
-            <div id="status-options">
-              <ul>
-                <li id="status-online" className="active"><span className="status-circle"></span>
-                  <p>Online</p></li>
-                <li id="status-away"><span className="status-circle"></span>
-                  <p>Away</p></li>
-                <li id="status-busy"><span className="status-circle"></span>
-                  <p>Busy</p></li>
-                <li id="status-offline"><span className="status-circle"></span>
-                  <p>Offline</p></li>
-              </ul>
-            </div>
           </div>
         </div>
         <div id="contacts">
@@ -53,15 +55,18 @@ class SidePanel extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, ownProps) => ({
+  selectedUser: state.selectedUser,
   loading: state.users.loading,
   users: state.users.entries,
-  currentUser: state.currentUser
+  currentUser: state.currentUser,
+  urlUser: ownProps && ownProps.match && ownProps.match.params ? ownProps.match.params.user : null
 });
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadUsers: () => dispatch(loadUsers())
+    loadUsers: () => dispatch(loadUsers()),
+    selectUser: user => dispatch(selectUser(user))
   };
 };
 
