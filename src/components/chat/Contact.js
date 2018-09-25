@@ -7,21 +7,19 @@ class Contact extends Component {
 
   constructor(props) {
     super(props);
-    this.username = props.username;
-    this.photo = props.photo;
-    this.lastMessage = props.lastMessage;
+    this.id = props.id;
 
     this.handleClick = this.handleClick.bind(this);
   }
 
   getClassName() {
-    return this.props.selected && this.username === this.props.selected.username ? 'contact active' : 'contact';
+    return this.props.selected && this.props.users[this.id].username === this.props.selected.username ? 'contact active' : 'contact';
   }
 
   handleClick() {
     this.props.selectUser({
-      username: this.username,
-      photo: this.photo
+      username: this.props.users[this.id].username,
+      photo: this.props.users[this.id].photo
     });
   }
 
@@ -30,10 +28,10 @@ class Contact extends Component {
       <li className={this.getClassName()} onClick={this.handleClick}>
         <div className="wrap">
           <span className="contact-status online"></span>
-          <img src={this.photo}/>
+          <img src={this.props.users[this.id].photo}/>
           <div className="meta">
-            <p className="name">{this.username}</p>
-            <p className="preview">{this.lastMessage}</p>
+            <p className="name">{this.props.users[this.id].username}</p>
+            <p className="preview">{this.props.users[this.id].lastMessage}</p>
           </div>
         </div>
       </li>
@@ -42,7 +40,8 @@ class Contact extends Component {
 }
 
 const mapStateToProps = state => ({
-  selected: state.selectedUser
+  selected: state.selectedUser,
+  users: state.users.entries
 });
 
 const mapDispatchToProps = dispatch => {

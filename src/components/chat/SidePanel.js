@@ -19,10 +19,7 @@ class SidePanel extends Component {
       return <div className="no-contacts">No contacts</div>;
     }
 
-    return this.props.users.map(user => {
-      const lastMessage = user.lastMessage ? user.lastMessage : null;
-      return <Contact username={user.username} photo={user.photo} lastMessage={lastMessage}/>; //TODO: fix the last message
-    });
+    return this.props.users.map((user, id) => <Contact id={id}/>);
   }
 
   render() {
